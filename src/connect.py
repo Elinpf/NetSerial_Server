@@ -1,6 +1,7 @@
 import threading
 import paramiko
 import socket
+import select
 from config import conf
 from src.log import logger
 from src.ssh import Server
@@ -80,14 +81,6 @@ class SSHConnection(Connection):
 
         logger.info('Authenticatied!')
 
-        server.event.set()
-        # ! why can't
-        server.event.wait(10)
-        if not server.event.is_set():
-            logger.error('Client never asked.')
-            exit()
-        
-
     def send(self, msg):
         self._channel.send(msg)
 
@@ -96,6 +89,8 @@ class SSHConnection(Connection):
         threading
         """
         while not self._thread_stop:
+            select.select([self._channel], [], [], 2)
+
             if self._channel.recv_ready():
                 c = self._channel.recv(10)
                 logger.debug('recv from SSH Connection -> %s' % c)
@@ -106,8 +101,14 @@ class SSHConnection(Connection):
         """
         get bytes one time
         """
-        if self._channel.recv_ready():
-            return self._channel.recv(10)
+        c = ""
+        while not c:
+            select.select([self._channel], [], [], 2)
+
+            if self._channel.recv_ready():
+                c = self._channel.recv(10)
+
+        return c
 
     def run(self):
         """

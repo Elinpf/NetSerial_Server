@@ -1,5 +1,6 @@
 from functools import wraps
 import string
+from src.log import logger
 
 
 class Select():
@@ -13,13 +14,13 @@ class Select():
         ask terminal, select a room, and give a username
         """
         self.banner()
-        recv_id = self.send_room_id_line()
+        recv_id = self.input_room_id()
 
         while not self.check_room_id(recv_id):
             self.error_msg('No Room, Please check the room id.')
-            recv_id  = self.send_room_id_line()
+            recv_id  = self.input_room_id()
 
-        username = self.send_username_line()
+        username = self.input_username()
         return (recv_id, username)
         
 
@@ -27,29 +28,29 @@ class Select():
         self.send("************************\r\n")
         self.send("NetSerial by Elin\r\n")
         self.send("************************\r\n")
+        self.send_line()
 
     def send(self, c):
         self._conn.send(c)
 
     def recv(self):
-        return self._coon.recv_bytes()
+        return self._conn.recv_bytes()
 
-    def send_room_id_line(self):
-        self.send("room id: ")
-        recv_id = self.recv_input()
-        return recv_id
+    def input_room_id(self):
+        return self.wait_input("room id: ")
 
-    def send_username_line(self):
-        self.send("username: ")
-        username = self.recv_input()
-        return username
+    def input_username(self):
+        return self.wait_input("username: ")
+
+    def wait_input(self, msg):
+        self.send(msg)
+        return self.recv_input()
 
     def check_room_id(self, room_id):
         return room_id in self._rlist_keys
 
     def error_msg(self, msg):
-        self.send("Get Error!\r\n")
-        self.send("%s \r\n" % msg)
+        self.send("\r\n%s \r\n" % msg)
         self.send_line()
 
     def send_line(self):
@@ -62,12 +63,13 @@ class Select():
         _str = ""
         c = ""
         while True:
-            c = self.recv()
+            c = self.recv().decode()  # to str
             if c in (string.ascii_letters + string.digits):
                 if len(_str) <= 10:  # max length is 10 char
                     self.send(c)  # echo
                     _str += c
             elif c == '\r':  # TODO: join back key
                 break
-
+            
+        logger.info('input room id -> %s' % _str)
         return _str

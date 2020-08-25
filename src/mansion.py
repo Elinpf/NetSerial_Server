@@ -73,7 +73,7 @@ class Mansion():
                 return False
         return True
 
-    def enter_the_room(self, conn):
+    def select_room(self, conn):
         """
         Enter a room, need select a room ID, and give a username
         """
