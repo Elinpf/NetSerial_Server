@@ -16,8 +16,8 @@ fh.setFormatter(fh_formatter)
 
 # to screen
 sh = logging.StreamHandler()
-# sh.setLevel(logging.INFO)
-sh.setLevel(logging.DEBUG)
+sh.setLevel(logging.INFO)
+# sh.setLevel(logging.DEBUG)
 sh.setFormatter(sh_formatter)
 
 # add Handler

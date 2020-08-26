@@ -62,6 +62,17 @@ class Mansion():
             logger.error('ssh listening port is not CONFIGURATION port')
             raise AttributeError
 
+    def close_connection(self, conn):
+        """
+        close a connection
+        """
+        if not conn.in_room():  # if not in a room
+            conn.close()
+            return 
+
+        rid = conn.room_id()
+        self._rlist[rid].close_connection(conn)
+
     def random_id(self):
         s = conf.ROOM_ID_STRING
         s = random.sample(s, conf.ROOM_ID_LENGTH)

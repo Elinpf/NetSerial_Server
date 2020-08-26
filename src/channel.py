@@ -20,3 +20,8 @@ class Channel():
         self._conn.close()
         del self._conn
 
+    def room_id(self):
+        return self._room.id
+
+    def has_connection(self, conn):
+        return self._conn is conn

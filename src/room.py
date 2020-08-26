@@ -2,10 +2,11 @@ from src.control import Control
 from src.register import Register
 from src.channel import Channel
 
+
 class Room():
 
     def __init__(self, _id):
-        self._channel:Channel = None
+        self._channel: Channel = None
         self._control = Control(self)
         self.register = Register(self)
         self.id = _id
@@ -48,3 +49,10 @@ class Room():
         """
         self._channel.close()
         self._control.close()
+
+    def close_connection(self, conn):
+        if self._channel.has_connection(conn):
+            self.close()
+
+        else:
+            self._control.remove(conn)

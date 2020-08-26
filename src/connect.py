@@ -5,6 +5,7 @@ import select
 from config import conf
 from src.log import logger
 from src.ssh import Server
+from src.variable import gvar
 
 
 class Connection():
@@ -41,6 +42,9 @@ class Connection():
 
     def close(self):
         raise NotImplementedError
+
+    def notice_close(self):
+        gvar.manager.close_connection(self)
 
 
 class SSHConnection(Connection):
@@ -82,6 +86,7 @@ class SSHConnection(Connection):
         logger.info('Authenticatied!')
 
     def send(self, msg):
+        # logger.debug('SSHConnection send stream -> %s' % msg)
         self._channel.send(msg)
 
     def recv(self):
@@ -89,10 +94,13 @@ class SSHConnection(Connection):
         threading
         """
         while not self._thread_stop:
-            select.select([self._channel], [], [], 2)
+            ready = select.select([self._channel], [], [], None)[0]
+
+            if ready[0].closed:
+                self.notice_close()
 
             if self._channel.recv_ready():
-                c = self._channel.recv(10)
+                c = self._channel.recv(50)
                 logger.debug('recv from SSH Connection -> %s' % c)
                 if self._control:
                     self._control.notice(c)
@@ -103,7 +111,10 @@ class SSHConnection(Connection):
         """
         c = ""
         while not c:
-            select.select([self._channel], [], [], 2)
+            ready = select.select([self._channel], [], [], None)[0]
+
+            if ready[0].closed:
+                self.notice_close()
 
             if self._channel.recv_ready():
                 c = self._channel.recv(10)
@@ -122,8 +133,11 @@ class SSHConnection(Connection):
         """
         return self._control is not None
 
+    def room_id(self):
+        return self._control.room_id()
+
     def close(self):
-        self._channel.close()
+        self.thread_stop()
 
     def thread_stop(self):
         self._thread_stop = True

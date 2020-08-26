@@ -77,6 +77,7 @@ class Select():
                     self.send(c)  # echo
                     _str += c
             elif c == '\r':  # TODO: join back key
+                self.send_line()
                 break
             
         logger.info('input room id -> %s' % _str)

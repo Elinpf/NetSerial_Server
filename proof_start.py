@@ -1,10 +1,11 @@
 import ptvsd
+from src.variable import gvar
 from src.manager import Manager
 from src.mansion import Mansion
 
-manager = Manager()
-mansion = Mansion()
+gvar.manager = Manager()
+gvar.mansion = Mansion()
 
-manager.mansion = mansion
+gvar.manager.mansion = gvar.mansion
 
-manager.start_ssh_server()
+gvar.manager.start_ssh_server()

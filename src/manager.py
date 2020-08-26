@@ -17,6 +17,9 @@ class Manager():
         conn = SSHConnection(sock)
         self.mansion.get_connection(conn, port)
 
+    def close_connection(self, conn):
+        self.mansion.close_connection(conn)
+
     def start_ssh_server(self):
         self.create_ssh_server(self.ssh_server_client, conf.SSH_SERVER_LISTENING_CLIENT_PORT)
         self.create_ssh_server(self.ssh_server_terminal, conf.SSH_SERVER_LISTENING_TERMINIAL_PORT)
@@ -36,6 +39,3 @@ class Manager():
         var.listener = listener
         var._port = port
         var.thread_run()
-
-
-

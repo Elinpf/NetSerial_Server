@@ -9,6 +9,7 @@ class Control():
     def append(self, conn):
         self._clist.append(conn)
         conn._control = self
+        conn.thread_run()
 
     def notice(self, msg):
         self._room.recv_from_control(msg)
@@ -21,3 +22,10 @@ class Control():
         for conn in self._clist:
             conn.close()
             del conn
+
+    def remove(self, conn):
+        self._clist.remove(conn)
+        conn.close()
+
+    def room_id(self):
+        return self._room.id
