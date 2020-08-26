@@ -21,6 +21,7 @@ class Select():
             recv_id  = self.input_room_id()
 
         username = self.input_username()
+        self.done_select_room()
         return (recv_id, username)
         
 
@@ -29,6 +30,13 @@ class Select():
         self.send("NetSerial by Elin\r\n")
         self.send("************************\r\n")
         self.send_line()
+
+    def done_select_room(self):
+        self.send_line()
+        self.send('join the room, connection the remote console.\r\n')
+        self.send('*'*80 +  '\r\n')
+        self.send_line()
+
 
     def send(self, c):
         self._conn.send(c)

@@ -2,6 +2,7 @@ from src.exceptions import StructError
 from src.protocol import Protocol
 from src.log import logger
 
+
 class Register():
     """
     base first code is 0x1
@@ -18,13 +19,21 @@ class Register():
     0x2 : wait room id
     0x4 : full
     """
+
+    INIT_STATUS         = 0x1
+    WAIT_ROOM_ID_STATUS = 0x2
+    FULL_STATUS         = 0x4
+
     def __init__(self, room):
         self._room = room
-        self.status = 0
-        
+        self.status = self.INIT_STATUS
+
     def recv(self, msg):
         try:
             r = Protocol(msg)
+            head = r.get_int8()
+            if head != 0x1: return
+
             code = r.get_int8()
             if code == 0x0:
                 self.get_request()
@@ -44,18 +53,16 @@ class Register():
         except StructError:
             self.send_error()
 
-
     def get_request(self):
-        if not self.status == 0x0:
+        if not self.status == self.INIT_STATUS:
             self.send_error()
             return
 
-        else: 
+        else:
             self.send_room_id()
-            self.status = 0x1
 
-    def get_fin_room_id(self, pro:Protocol):
-        if not self.status == 0x2:
+    def get_fin_room_id(self, pro: Protocol):
+        if not self.status == self.WAIT_ROOM_ID_STATUS:
             self.send_error()
             return
 
@@ -63,15 +70,15 @@ class Register():
         if not self._room.id == room_id:
             self.send_error()
             return
-        self.status = 0x4
-        
-
+        self.status = self.FULL_STATUS
+        logger.debug('Register: Full Status')
 
     def send_room_id(self):
-        bs = self.get_protocol_head(1)
+        bs = self.get_protocol_head(0x1)
         bs.add_str(self._room.id)
         self.send(bs)
-        self.status = 0x2
+        self.status = self.WAIT_ROOM_ID_STATUS
+        logger.debug('Register: send room id: %s' % bs.get_packet())
 
     def send_error(self):
         """
@@ -79,19 +86,18 @@ class Register():
         """
         bs = self.get_protocol_head(0xf)
         self.send(bs)
-        self.status = 0x0
+        self.status = self.INIT_STATUS
         logger.error('Register Get an Error')
 
-    def get_protocol_head(self, code:int):
+    def get_protocol_head(self, code: int):
         bs = Protocol()
         bs.add_int8(0x1)
         bs.add_int8(code)
         return bs
 
-    def send(self, bs:Protocol):
+    def send(self, bs: Protocol):
         msg = bs.get_packet()
         self._room.send_to_channel(msg)
 
     def is_full(self):
-        return self.status == 0x4
-        
+        return (self.status == self.FULL_STATUS)

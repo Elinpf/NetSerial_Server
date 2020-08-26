@@ -31,7 +31,7 @@ class Room():
         recv from channel, then send to control
         if register status is not full, then send to register
         """
-        if not self.register.is_full:
+        if not self.register.is_full():
             self.register.recv(msg)
         else:
             self.send_to_control(msg)

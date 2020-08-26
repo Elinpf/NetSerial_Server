@@ -1,6 +1,8 @@
+from src.exceptions import StructError
+
 class Protocol():
 
-    def __init__(self, bs):
+    def __init__(self, bs=None):
         if bs:
             self.bs = bytearray(bs)
         else:
@@ -19,9 +21,9 @@ class Protocol():
         try:
             res = self.bs[:1]
             self.bs = self.bs[1:]
-            return int.from_bytes(ret, byteorder='little')
+            return int.from_bytes(res, byteorder='little')
         except:
-            raise src.exceptions.StructError
+            raise StructError
 
     def get_str(self):
         try:
@@ -31,7 +33,7 @@ class Protocol():
             self.bs = self.bs[2 + length:]
             return res.decode(encoding='utf-8')
         except:
-            raise src.exceptions.StructError
+            raise StructError
 
     def get_packet(self):
         return self.bs

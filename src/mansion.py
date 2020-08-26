@@ -68,10 +68,7 @@ class Mansion():
         return ''.join(s)
 
     def check_id(self, i):
-        for room in self._rlist:
-            if room.id == i:
-                return False
-        return True
+        return not(i in self._rlist.keys())
 
     def select_room(self, conn):
         """
@@ -85,5 +82,6 @@ class Mansion():
         room = self._rlist[room_id]
         conn.username = username
         room.add_connection(conn)
+        del se
 
         

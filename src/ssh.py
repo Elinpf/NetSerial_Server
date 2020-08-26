@@ -49,15 +49,16 @@ class SSHServer():
 
     def run(self):
         while not self._thread_stop:
-            ready = [self.listener]
-
-            ready = select.select(ready, ready, [], 2)[0]
+            ready = select.select([self.listener], [], [], 2)[0]
 
             for _ in ready:  # establish new TCP session
-                if _ is self.listener:
+                try:
                     _socket, addr = self.listener.accept()
-                    if self.manager:
-                        self.manager.get_ssh_connection(_socket, self._port)
+                except Exception as e:
+                    logger.error('a bad socket %s ' % e)
+
+                if self.manager:
+                    self.manager.get_ssh_connection(_socket, self._port)
 
     def thread_stop(self):
         self._thread_stop = True

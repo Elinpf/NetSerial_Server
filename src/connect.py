@@ -73,7 +73,7 @@ class SSHConnection(Connection):
             logger.error("SSH negotiation failed.")
             exit()
 
-        self._channel = self._tp.accept(20)
+        self._channel = self._tp.accept(200)
 
         if self._channel is None:
             logger.error('No channel')
