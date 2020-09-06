@@ -49,7 +49,7 @@ class SSHServer():
 
     def run(self):
         while not self._thread_stop:
-            ready = select.select([self.listener], [], [], 2)[0]
+            ready = select.select([self.listener], [], [], None)[0]
 
             for _ in ready:  # establish new TCP session
                 try:

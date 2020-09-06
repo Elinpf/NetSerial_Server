@@ -80,5 +80,4 @@ class Select():
                 self.send_line()
                 break
             
-        logger.info('input room id -> %s' % _str)
         return _str

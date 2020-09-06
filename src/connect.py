@@ -86,7 +86,6 @@ class SSHConnection(Connection):
         logger.info('Authenticatied!')
 
     def send(self, msg):
-        # logger.debug('SSHConnection send stream -> %s' % msg)
         self._channel.send(msg)
 
     def recv(self):
@@ -101,7 +100,6 @@ class SSHConnection(Connection):
 
             if self._channel.recv_ready():
                 c = self._channel.recv(50)
-                logger.debug('recv from SSH Connection -> %s' % c)
                 if self._control:
                     self._control.notice(c)
 
@@ -117,7 +115,7 @@ class SSHConnection(Connection):
                 self.notice_close()
 
             if self._channel.recv_ready():
-                c = self._channel.recv(10)
+                c = self._channel.recv(50)
 
         return c
 
