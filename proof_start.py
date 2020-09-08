@@ -9,3 +9,5 @@ gvar.mansion = Mansion()
 gvar.manager.mansion = gvar.mansion
 
 gvar.manager.start_ssh_server()
+
+gvar.manager.waiting_keyboard_interrupt()

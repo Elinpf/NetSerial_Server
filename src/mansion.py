@@ -95,4 +95,8 @@ class Mansion():
         room.add_connection(conn)
         del se
 
+    def close(self):
+        for room in self._rlist:
+            room.close()
+
         

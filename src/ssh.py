@@ -51,6 +51,8 @@ class SSHServer():
         while not self._thread_stop:
             ready = select.select([self.listener], [], [], None)[0]
 
+            if self.listener._closed: return
+
             for _ in ready:  # establish new TCP session
                 try:
                     _socket, addr = self.listener.accept()
@@ -68,3 +70,7 @@ class SSHServer():
         th = threading.Thread(target=self.run, name="SSH Server Listening")
         th.start()
         logger.info('thread start -> SSHServer.run()')
+
+    def close(self):
+        self.thread_stop()
+        self.listener.close()
