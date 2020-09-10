@@ -3,3 +3,6 @@ class ProtocelError(Exception):
 
 class StructError(ProtocelError):
     pass
+
+class SSHException(Exception):
+    pass

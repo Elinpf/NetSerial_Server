@@ -5,6 +5,7 @@ import paramiko
 from paramiko.py3compat import b, u, decodebytes
 from config import conf
 from src.log import logger
+from src.exceptions import SSHException
 
 
 class Server(paramiko.ServerInterface):
@@ -60,7 +61,10 @@ class SSHServer():
                     logger.error('a bad socket %s ' % e)
 
                 if self.manager:
-                    self.manager.get_ssh_connection(_socket, self._port)
+                    try:
+                        self.manager.get_ssh_connection(_socket, self._port)
+                    except SSHException:
+                        continue
 
     def thread_stop(self):
         self._thread_stop = True

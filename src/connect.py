@@ -6,6 +6,7 @@ from config import conf
 from src.log import logger
 from src.ssh import Server
 from src.variable import gvar
+from src.exceptions import SSHException
 
 
 class Connection():
@@ -75,7 +76,7 @@ class SSHConnection(Connection):
             self._tp.start_server(server=server)
         except paramiko.SSHException:
             logger.error("SSH negotiation failed.")
-            exit()
+            raise SSHException
 
         self._channel = self._tp.accept(200)
 
