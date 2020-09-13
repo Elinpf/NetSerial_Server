@@ -2,7 +2,7 @@
 
 # 简介
 
-`Serial_Server` 是 [Serial_Client](https://github.com/Elinpf/Serial_Client)的服务器端。
+`Serial_Server` 是 [Serial_Client](https://github.com/Elinpf/NetSerial_Client)的服务器端。
 
 提供了房间功能，方便远端工程师在SSH的方式登录后通过选择房间号进入对应的终端。
 
@@ -11,7 +11,7 @@
 # 安装方法
 
 ```
-git clone https://github.com/Elinpf/Serial_Server.git
+git clone https://github.com/Elinpf/NetSerial_Server.git
 ```
 
 # 使用方法
