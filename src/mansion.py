@@ -96,7 +96,7 @@ class Mansion():
         del se
 
     def close(self):
-        for room in self._rlist:
-            room.close()
+        for room_id in self._rlist:
+            self.del_room_by_id(room_id)
 
         
