@@ -25,9 +25,13 @@ class Mansion():
         self._rlist[i] = room
 
     def del_room_by_id(self, i: int):
-        room = self._rlist.pop(i)  # ! if not exist
+        if i not in self._rlist.keys():
+            return False
+
+        room = self._rlist.pop(i)
         room.close()
         del room
+        return True
 
     def del_room(self, room: Room):
         """
