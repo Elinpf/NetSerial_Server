@@ -1,6 +1,7 @@
 from src.exceptions import StructError
 from src.protocol import Protocol
 from src.log import logger
+from src.config import conf
 
 
 class Register():
@@ -20,9 +21,9 @@ class Register():
     0x4 : full
     """
 
-    INIT_STATUS         = 0x1
+    INIT_STATUS = 0x1
     WAIT_ROOM_ID_STATUS = 0x2
-    FULL_STATUS         = 0x4
+    FULL_STATUS = 0x4
 
     def __init__(self, room):
         self._room = room
@@ -32,7 +33,8 @@ class Register():
         try:
             r = Protocol(msg)
             head = r.get_int8()
-            if head != 0x1: return
+            if head != 0x1:
+                return
 
             code = r.get_int8()
             if code == 0x0:
@@ -74,8 +76,12 @@ class Register():
         logger.debug('Register: Full Status')
 
     def send_room_id(self):
+        """
+        | 0x1 | room_id | server terminal listening port |
+        """
         bs = self.get_protocol_head(0x1)
         bs.add_str(self._room.id)
+        bs.add_str(str(conf.SSH_SERVER_LISTENING_TERMINIAL_PORT))
         self.send(bs)
         self.status = self.WAIT_ROOM_ID_STATUS
         logger.debug('Register: send room id: %s' % bs.get_packet())
