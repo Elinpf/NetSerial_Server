@@ -1,6 +1,6 @@
 import random
 import time
-from config import conf
+from src.config import conf
 from src.room import Room
 from src.log import logger
 from src.select import Select

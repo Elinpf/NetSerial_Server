@@ -1,6 +1,6 @@
 import socket
 from src.log import logger
-from config import conf
+from src.config import conf
 from src.ssh import SSHServer
 from src.connect import SSHConnection
 

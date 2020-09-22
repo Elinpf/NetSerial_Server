@@ -2,7 +2,7 @@ import threading
 import paramiko
 import socket
 import select
-from config import conf
+from src.config import conf
 from src.log import logger
 from src.ssh import Server
 from src.variable import gvar

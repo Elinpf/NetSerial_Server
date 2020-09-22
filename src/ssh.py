@@ -3,7 +3,7 @@ import threading
 import select
 import paramiko
 from paramiko.py3compat import b, u, decodebytes
-from config import conf
+from src.config import conf
 from src.log import logger
 from src.exceptions import SSHException
 
@@ -52,7 +52,8 @@ class SSHServer():
         while not self._thread_stop:
             ready = select.select([self.listener], [], [], None)[0]
 
-            if self.listener._closed: return
+            if self.listener._closed:
+                return
 
             for _ in ready:  # establish new TCP session
                 try:

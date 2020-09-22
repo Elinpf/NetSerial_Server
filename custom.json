@@ -1,0 +1,6 @@
+{
+    "SSH_SERVER_USERNAME": "bar",
+    "SSH_SERVER_PASSWORD": "foo",
+    "SSH_SERVER_LISTENING_CLIENT_PORT": 2200,
+    "SSH_SERVER_RSA_EKY": "server_rsa"
+}

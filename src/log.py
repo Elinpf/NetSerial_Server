@@ -1,6 +1,4 @@
 import logging
-import paramiko
-from config import conf
 
 
 logger = logging.getLogger()
@@ -25,5 +23,3 @@ logger.addHandler(fh)
 logger.addHandler(sh)
 
 logger.info("============= Start New Process =============")
-
-paramiko.util.log_to_file(conf.SSH_PARAMIKO_LOG_PATH)
