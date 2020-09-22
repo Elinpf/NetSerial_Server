@@ -1,5 +1,4 @@
 import socket
-import threading
 from src.log import logger
 from config import conf
 from src.ssh import SSHServer
@@ -54,8 +53,8 @@ class Manager():
                 time.sleep(100)
 
         except KeyboardInterrupt:
-           self.shutdown()
-    
+            self.shutdown()
+
     def shutdown(self):
         import sys
         logger.info('shutdown the programe.')

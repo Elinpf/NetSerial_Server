@@ -1,6 +1,8 @@
 from src.control import Control
 from src.register import Register
 from src.channel import Channel
+from src.log import logger
+from src.variable import gvar
 
 
 class Room():
@@ -25,7 +27,11 @@ class Room():
         """
         recv from control, then send to channel
         """
-        self.send_to_channel(msg)
+        try:
+            self.send_to_channel(msg)
+        except OSError:
+            logger.debug("send error, close this room: %s" % self.id)
+            gvar.mansion.del_room_by_id(self.id)
 
     def recv_from_channel(self, msg):
         """

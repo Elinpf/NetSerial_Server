@@ -3,6 +3,7 @@ class Channel():
     """
     this class channel with Client.
     """
+
     def __init__(self, room, conn):
         self._room = room
         self._conn = conn
@@ -14,11 +15,13 @@ class Channel():
         self._room.recv_from_channel(msg)
 
     def send(self, msg):
-        self._conn.send(msg)
+        try:
+            self._conn.send(msg)
+        except AttributeError:
+            raise OSError
 
     def close(self):
         self._conn.close()
-        del self._conn
 
     def room_id(self):
         return self._room.id

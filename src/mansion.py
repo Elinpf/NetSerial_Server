@@ -1,5 +1,5 @@
 import random
-import string
+import time
 from config import conf
 from src.room import Room
 from src.log import logger
@@ -25,7 +25,7 @@ class Mansion():
         self._rlist[i] = room
 
     def del_room_by_id(self, i: int):
-        room = self._rlist.pip(i)
+        room = self._rlist.pop(i)  # ! if not exist
         room.close()
         del room
 
@@ -50,7 +50,6 @@ class Mansion():
         logger.info('Got a terminal connection, select a room')
         self.select_room(conn)
 
-
     def get_connection(self, conn, port):
         if port == conf.SSH_SERVER_LISTENING_CLIENT_PORT:
             self.get_channel_connection(conn)
@@ -68,7 +67,7 @@ class Mansion():
         """
         if not conn.in_room():  # if not in a room
             conn.close()
-            return 
+            return
 
         rid = conn.room_id()
         self._rlist[rid].close_connection(conn)
@@ -96,7 +95,10 @@ class Mansion():
         del se
 
     def close(self):
-        for room_id in self._rlist:
-            self.del_room_by_id(room_id)
-
-        
+        try:
+            for (_, room) in self._rlist.items():
+                room.close()
+        except RuntimeError:
+            logger.error("can't close room now, try again")
+            time.sleep(0.2)
+            self.close()

@@ -2,6 +2,7 @@ class Control():
     """
     this class connection with Terminial client
     """
+
     def __init__(self, room):
         self._clist = []
         self._room = room
@@ -19,9 +20,11 @@ class Control():
             conn.send(msg)
 
     def close(self):
-        for conn in self._clist:
-            conn.close()
-            del conn
+        try:
+            for conn in self._clist:
+                conn.close()
+        except EOFError:
+            pass
 
     def remove(self, conn):
         self._clist.remove(conn)

@@ -137,6 +137,7 @@ class SSHConnection(Connection):
 
     def close(self):
         self.thread_stop()
+        self._socket.close()
 
     def thread_stop(self):
         self._thread_stop = True

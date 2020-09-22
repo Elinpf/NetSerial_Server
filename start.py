@@ -1,4 +1,3 @@
-import ptvsd
 from src.variable import gvar
 from src.manager import Manager
 from src.mansion import Mansion

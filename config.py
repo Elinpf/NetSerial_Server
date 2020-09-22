@@ -1,5 +1,6 @@
 import string
 
+
 class conf():
 
     # set ssh server username
@@ -25,4 +26,4 @@ class conf():
 
     # set room random string
     # ROOM_ID_STRING = string.ascii_lowercase + string.digits
-    ROOM_ID_STRING = string.digits 
+    ROOM_ID_STRING = string.digits
