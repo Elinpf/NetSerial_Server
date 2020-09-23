@@ -39,6 +39,7 @@ class Connection():
         self._thread_stop = False
         th = threading.Thread(target=self.run, name='connection run')
         th.start()
+        gvar.thread.append(th)
         logger.info('thread start -> Connection.recv()')
 
     def close(self):

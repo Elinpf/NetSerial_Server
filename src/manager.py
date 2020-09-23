@@ -3,6 +3,7 @@ from src.log import logger
 from src.config import conf
 from src.ssh import SSHServer
 from src.connect import SSHConnection
+from src.variable import gvar
 
 
 class Manager():
@@ -60,5 +61,6 @@ class Manager():
         logger.info('shutdown the programe.')
         self.close_ssh_server()
         self.close_mansion()
+        gvar.thread.kill_all_thread()
         logger.info('bye!')
         sys.exit(0)
