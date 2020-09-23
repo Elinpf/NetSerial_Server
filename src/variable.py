@@ -1,12 +1,17 @@
+from src.thread import Thread
+
+
 class gloabl_variable():
 
     def __init__(self):
         # src.manager.Manger
-        # from src.manager import Manager
         self.manager = None
 
         # src.mansion.Mansion
-        # from src.mansion import Mansion
         self.mansion = None
+
+        # manager threads
+        self.thread = Thread()
+
 
 gvar = gloabl_variable()

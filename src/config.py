@@ -17,7 +17,7 @@ class config():
     SSH_SERVER_LISTENING_CLIENT_PORT = 2200
 
     # set ssh server listening from terminal port
-    SSH_SERVER_LISTENING_TERMINIAL_PORT = SSH_SERVER_LISTENING_CLIENT_PORT + 100
+    SSH_SERVER_LISTENING_TERMINIAL_PORT = 2300
 
     # set ssh server rsa key path
     SSH_SERVER_RSA_EKY = 'server_rsa'

@@ -1,5 +1,6 @@
 from src.exceptions import StructError
 
+
 class Protocol():
 
     def __init__(self, bs=None):
@@ -8,11 +9,11 @@ class Protocol():
         else:
             self.bs = bytearray(0)
 
-    def add_int8(self, val:int):
+    def add_int8(self, val: int):
         bytes_value = bytearray(val.to_bytes(1, byteorder='little'))
         self.bs += bytes_value
 
-    def add_str(self, val:str):
+    def add_str(self, val: str):
         bytes_val = bytearray(val.encode(encoding='utf-8'))
         length = bytearray(len(bytes_val).to_bytes(2, byteorder='little'))
         self.bs += (length + bytes_val)
@@ -37,5 +38,3 @@ class Protocol():
 
     def get_packet(self):
         return self.bs
-
-        

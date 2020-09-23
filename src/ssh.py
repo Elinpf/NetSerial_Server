@@ -2,9 +2,9 @@ import socket
 import threading
 import select
 import paramiko
-from paramiko.py3compat import b, u, decodebytes
 from src.config import conf
 from src.log import logger
+from src.variable import gvar
 from src.exceptions import SSHException
 
 
@@ -58,14 +58,14 @@ class SSHServer():
             for _ in ready:  # establish new TCP session
                 try:
                     _socket, addr = self.listener.accept()
+                    if self.manager:
+                        try:
+                            self.manager.get_ssh_connection(
+                                _socket, self._port)
+                        except SSHException:
+                            continue
                 except Exception as e:
                     logger.error('a bad socket %s ' % e)
-
-                if self.manager:
-                    try:
-                        self.manager.get_ssh_connection(_socket, self._port)
-                    except SSHException:
-                        continue
 
     def thread_stop(self):
         self._thread_stop = True
@@ -74,6 +74,7 @@ class SSHServer():
         self._thread_stop = False
         th = threading.Thread(target=self.run, name="SSH Server Listening")
         th.start()
+        gvar.thread.append(th)
         logger.info('thread start -> SSHServer.run()')
 
     def close(self):
