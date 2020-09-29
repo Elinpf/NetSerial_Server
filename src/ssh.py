@@ -25,6 +25,25 @@ class Server(paramiko.ServerInterface):
     def enable_auth_gssapi(self):
         return True
 
+    def check_auth_gssapi_keyex(
+        self, username, gss_authenticated=paramiko.AUTH_FAILED, cc_file=None
+    ):
+        if gss_authenticated == paramiko.AUTH_SUCCESSFUL:
+            return paramiko.AUTH_SUCCESSFUL
+        return paramiko.AUTH_FAILED
+
+    def get_allowed_auths(self, username):
+        return "gssapi-keyex,gssapi-with-mic,password,publickey"
+
+    def check_channel_shell_request(self, channel):
+        self.event.set()
+        return True
+
+    def check_channel_pty_request(
+        self, channel, term, width, height, pixelwidth, pixelheight, modes
+    ):
+        return True
+
 
 class SSHServer():
 

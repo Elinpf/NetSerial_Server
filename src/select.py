@@ -1,6 +1,6 @@
-from functools import wraps
 import string
-from src.log import logger
+
+from src.banner import banner
 
 
 class Select():
@@ -18,25 +18,24 @@ class Select():
 
         while not self.check_room_id(recv_id):
             self.error_msg('No Room, Please check the room id.')
-            recv_id  = self.input_room_id()
+            recv_id = self.input_room_id()
 
         username = self.input_username()
         self.done_select_room()
         return (recv_id, username)
-        
 
     def banner(self):
-        self.send("************************\r\n")
-        self.send("NetSerial by Elin\r\n")
-        self.send("************************\r\n")
+        self.send("*"*60 + "\r\n")
+        self.send("                NetSerial by Elin\r\n")
+        self.send("View Project: %s\r\n" % banner.REPOSITORY_CLIENT_ADDRESS)
+        self.send("*"*60 + "\r\n")
         self.send_line()
 
     def done_select_room(self):
         self.send_line()
         self.send('join the room, connection the remote console.\r\n')
-        self.send('*'*80 +  '\r\n')
+        self.send('*'*80 + '\r\n')
         self.send_line()
-
 
     def send(self, c):
         self._conn.send(c)
@@ -79,5 +78,5 @@ class Select():
             elif c == '\r':  # TODO: join back key
                 self.send_line()
                 break
-            
+
         return _str

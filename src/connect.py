@@ -77,13 +77,15 @@ class SSHConnection(Connection):
             self._tp.start_server(server=server)
         except paramiko.SSHException:
             logger.error("SSH negotiation failed.")
-            raise SSHException
+            gvar.manager.close_connection(self)
+            exit()
 
         self._channel = self._tp.accept(200)
 
         if self._channel is None:
             logger.error('No channel')
-            raise SSHException
+            gvar.manager.close_connection(self)
+            exit()
 
         logger.info('Authenticatied!')
 
