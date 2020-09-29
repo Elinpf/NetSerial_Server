@@ -69,6 +69,7 @@ class Mansion():
         """
         close a connection
         """
+        logger.debug("close the connection")
         if not conn.in_room():  # if not in a room
             conn.close()
             return
@@ -88,7 +89,7 @@ class Mansion():
         """
         Enter a room, need select a room ID, and give a username
         """
-        logger.info("into select room process...")
+        logger.debug("into select room process...")
         se = Select(self._rlist.keys(), conn)
         room_id, username = se.process()
 

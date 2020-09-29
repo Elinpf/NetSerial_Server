@@ -83,12 +83,17 @@ class SSHConnection(Connection):
 
         if self._channel is None:
             logger.error('No channel')
-            exit()
+            raise SSHException
 
         logger.info('Authenticatied!')
 
     def send(self, msg):
-        self._channel.send(msg)
+        try:
+            self._channel.send(msg)
+        except OSError:
+            logger.info("socket is closed")
+            gvar.manager.close_connection(self)
+            return
 
     def recv(self):
         """
@@ -115,6 +120,7 @@ class SSHConnection(Connection):
 
             if ready[0].closed:
                 self.notice_close()
+                exit()
 
             if self._channel.recv_ready():
                 c = self._channel.recv(50)
@@ -125,7 +131,12 @@ class SSHConnection(Connection):
         """
         alias self.recv()
         """
-        self.recv()
+        try:
+            self.recv()
+        except Exception:
+            logger.debug("connection got a error, closed")
+            gvar.manager.close_connection(self)
+            exit()
 
     def in_room(self):
         """

@@ -17,6 +17,7 @@ class Manager():
         self.mansion.get_connection(conn, port)
 
     def close_connection(self, conn):
+        logger.debug("close the connection")
         self.mansion.close_connection(conn)
 
     def start_ssh_server(self):
@@ -34,7 +35,7 @@ class Manager():
             logger.error(
                 'SSH.start listening port:%s Error, Exit...' % port)
         var = SSHServer()
-        var.manager = self
+        var.manager = self  # ! maybe not need
         var.listener = listener
         var._port = port
         var.thread_run()

@@ -5,7 +5,6 @@ import paramiko
 from src.config import conf
 from src.log import logger
 from src.variable import gvar
-from src.exceptions import SSHException
 
 
 class Server(paramiko.ServerInterface):
@@ -59,11 +58,8 @@ class SSHServer():
                 try:
                     _socket, addr = self.listener.accept()
                     if self.manager:
-                        try:
-                            self.manager.get_ssh_connection(
-                                _socket, self._port)
-                        except SSHException:
-                            continue
+                        gvar.thread.function(
+                            target=self.manager.get_ssh_connection, args=(_socket, self._port), name='Got a SSH Connection')
                 except Exception as e:
                     logger.error('a bad socket %s ' % e)
 

@@ -43,8 +43,8 @@ class Thread():
         (self._tlist.remove(th)
          for th in self._tlist if not th.is_alive())  # ^_^
 
-    def function(self, func, name='', *args):
-        th = threading.Thread(target=func, args=args, name=name)
+    def function(self, target, args=(), name=''):
+        th = threading.Thread(target=target, args=args, name=name)
         th.start()
         self.append(th)
 
