@@ -13,6 +13,9 @@ class config():
     # set ssh server password
     SSH_SERVER_PASSWORD = 'foo'
 
+    # set ssh server ip
+    SSH_SERVER_LISTENING_IP = '127.0.0.1'
+
     # set ssh server listening from client port
     SSH_SERVER_LISTENING_CLIENT_PORT = 2200
 

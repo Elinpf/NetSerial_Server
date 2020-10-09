@@ -27,7 +27,7 @@ class Manager():
     def create_ssh_server(self, port):
         listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        listener.bind(("", port))
+        listener.bind((conf.SSH_SERVER_LISTENING_IP, port))
         try:
             listener.listen()
             logger.info('SSH.start listening port:%s  OK ...' % port)

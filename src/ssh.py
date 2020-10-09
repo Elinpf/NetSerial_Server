@@ -57,7 +57,7 @@ class SSHServer():
         self._port = port
         self.listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.listener.bind(("", self._port))
+        self.listener.bind((conf.SSH_SERVER_LISTENING_IP, self._port))
 
         try:
             self.listener.listen()
